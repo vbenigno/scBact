@@ -129,6 +129,8 @@ merge_barcodes <- function(matrix, bc1_list, output = getwd(), bc1_processed = N
 	
 	# Write the final sparse matrix to disk in Matrix Market format
 	Matrix::writeMM(final_sparse_Matrix2, file = paste0(output, '/UniqueAndMult-Uniform_BC1_collapsed.mtx'))
+	saveRDS(final_sparse_Matrix2, file = paste0(output, '/UniqueAndMult-Uniform_BC1_collapsed.RDS'))
+	
 	
 	# Remove temporary objects
 	gc()

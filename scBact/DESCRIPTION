@@ -1,0 +1,11 @@
+Package: scBact
+Title: Data analysis tool for single cell RNA seq by split-pool barcoding
+Version: 1.0
+Description: The package provides a function for analysis of single cell RNA sequencing by combinatorial 
+	barcoding data, for collapsing barcode 1 when two are used for the first round of barcoding.
+Author: Valentina Benigno, Helena Todorov
+Maintainer: Valentina Benigno <valentina.benigno@unil.ch>
+Imports: MatrixExtra, Matrix, rlang, methods, utils
+License: Unlimited
+RoxygenNote: 7.2.3
+Encoding: UTF-8

@@ -4,14 +4,14 @@
 \alias{merge_barcodes}
 \title{Barcode collapsing tool for single cell RNA seq by split-pool barcoding}
 \usage{
-merge_barcodes(matrix, bc1_list, output = getwd(), bc1_processed = NULL)
+merge_barcodes(matrix, bc1_list, output_dir = getwd(), bc1_processed = NULL)
 }
 \arguments{
-\item{matrix}{a dgT type matrix with barcodes as column names, in the format "ATGCCTAA_AATCCGTC_AAACGATA" and genes as row names}
+\item{matrix}{the raw UMI/cell count matrix. A dgT type matrix with barcodes as column names, in the format "ATGCCTAA_AATCCGTC_AAACGATA" and genes as row names}
 
-\item{bc1_list}{a table containing a 'barcode1' columm and a 'barcode2' column, filled with the two possible round 1 barcodes in each well}
+\item{bc1_list}{oligo-dT to random-mer mapping file. a table containing a 'barcode1' columm and a 'barcode2' column, filled with the two possible round 1 barcodes in each well}
 
-\item{output}{output directory. Current directory is default}
+\item{output_dir}{output directory. Current directory is default}
 
 \item{bc1_processed}{optional. If the function was run before, give the directory of the 'colnames_BC1_processed.RDS' output file}
 }
@@ -19,5 +19,18 @@ merge_barcodes(matrix, bc1_list, output = getwd(), bc1_processed = NULL)
 A new dgT type matrix with updated column names and summed counts
 }
 \description{
-Barcode collapsing tool for single cell RNA seq by split-pool barcoding
+merge_barcodes takes a matrix (`matrix`) and a list of barcodes (`bc1_list`) and it will output 2 files: 
+a file containing the list of new barcodes named `colnames_BC1_processed.RDS` and a new count matrix with updated colnames 
+(half of the initial number of columns) and summed counts named CountMatrix_BC1_collapsed.mtx and CountMatrix_BC1_collapsed.RDS
+}
+\details{
+The function first checks if `bc1_processed` is NULL. If it is, the function proceeds to process the barcodes in the matrix's column names 
+by extracting the last part of the column name (the barcode 1). Reading in the barcode list from `bc1_list`, the function checks if the barcode 
+is present in column `barcode1` or `barcode2` (representing the two possibilities of barcode 1 in each well) of the barcode list and appends 
+the corresponding barcode to `to_return`. If the barcode is not found or found in both columns, an error message is thrown.
+If `bc1_processed` is not NULL, `to_return` is read from the RDS file specified by `bc1_processed`. The function then modifies the matrix's 
+column names by replacing the last part of the name with the corresponding barcode from `to_return`. Next, the function creates a new sparse matrix 
+(`final_sparse_Matrix`) and iterates over duplicated column names in `matrix`. For each duplicated column name, the function extracts 
+the corresponding column from the matrix and creates a new sparse matrix (`test_tmp2`) that sums the row values and sets the column name 
+to the original column name's first instance.
 }
